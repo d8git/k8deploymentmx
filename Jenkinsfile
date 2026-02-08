@@ -39,12 +39,21 @@ pipeline {
             }
         }
 
-        stage('Login to Mendix Registry') {
+        
+stage('Login to Mendix Registry') {
     steps {
         echo "🔐 Logging in to Mendix registry"
-        bat """
-        docker login private-cloud.registry.mendix.com
-        """
+        withCredentials([usernamePassword(
+            credentialsId: 'mendix-registry-creds',
+            usernameVariable: 'MENDIX_USER',
+            passwordVariable: 'MENDIX_PASSWORD'
+        )]) {
+            bat """
+            echo %MENDIX_PASSWORD% | docker login private-cloud.registry.mendix.com ^
+              --username %MENDIX_USER% ^
+              --password-stdin
+            """
+        }
     }
 }
 
