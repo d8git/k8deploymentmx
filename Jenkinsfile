@@ -39,6 +39,16 @@ pipeline {
             }
         }
 
+        stage('Login to Mendix Registry') {
+    steps {
+        echo "🔐 Logging in to Mendix registry"
+        bat """
+        docker login private-cloud.registry.mendix.com
+        """
+    }
+}
+
+
         stage('Build Mendix App (.mda)') {
             steps {
                 echo "🏗️ Building Mendix MDA"
