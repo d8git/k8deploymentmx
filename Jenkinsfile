@@ -12,7 +12,7 @@ pipeline {
         ECR_REGISTRY  = "320368024572.dkr.ecr.us-east-1.amazonaws.com"
         IMAGE_TAG     = "mxdev-xv3i01a5-${BUILD_NUMBER}"
 
-        MXBUILD_IMAGE = "320368024572.dkr.ecr.us-east-1.amazonaws.com/aws-ecr:mxdev-build-10.24"
+        MXBUILD_IMAGE = "private-cloud.registry.mendix.com/mxbuild:10.24"
     }
 
     stages {
