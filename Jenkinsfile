@@ -26,7 +26,7 @@ pipeline {
 
         stage('Login to AWS ECR') {
             steps {
-                echo "🔐 Logging in to AWS ECR"
+                echo "🔐 Logging in to AWS ECR repo"
                 withCredentials([[ 
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'aws-ecr-creds'
