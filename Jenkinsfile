@@ -10,9 +10,9 @@ pipeline {
         AWS_ACCOUNT_ID = "320368024572"
         ECR_REPO      = "aws-ecr"
         ECR_REGISTRY  = "320368024572.dkr.ecr.us-east-1.amazonaws.com"
-        IMAGE_TAG     = "mxdev-xv3i01a5-${BUILD_NUMBER}"
+        IMAGE_TAG     = "${BUILD_NUMBER}"
 
-        MXBUILD_IMAGE = "private-cloud.registry.mendix.com/mendix/mxbuild:10.24"
+        MXBUILD_IMAGE = "320368024572.dkr.ecr.us-east-1.amazonaws.com/aws-ecr:mxdev-build-10.24"
     }
 
     stages {
@@ -39,39 +39,16 @@ pipeline {
             }
         }
 
-        
-stage('Login to Mendix Registry') {
-    steps {
-        echo "🔐 Logging in to Mendix registry"
-        withCredentials([usernamePassword(
-            credentialsId: 'mendix-registry-creds',
-            usernameVariable: 'MENDIX_USER',
-            passwordVariable: 'MENDIX_PASSWORD'
-        )]) {
-            bat """
-            echo %MENDIX_PASSWORD% | docker login private-cloud.registry.mendix.com ^
-              --username %MENDIX_USER% ^
-              --password-stdin
-            """
-        }
+
+
+        stage('Build Mendix App Image') {
+      steps {
+        sh '''
+          docker build -t $ECR_REPO:$IMAGE_TAG .
+          docker tag $ECR_REPO:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+        '''
+      }
     }
-}
-
-
-        stage('Build Mendix App (.mda)') {
-            steps {
-                echo "🏗️ Building Mendix MDA"
-                bat "if not exist dist mkdir dist"
-                bat """
-                docker run --rm ^
-                  -v "%cd%:/project" ^
-                  "%MXBUILD_IMAGE%" ^
-                  mxbuild ^
-                  --project-directory=/project ^
-                  --target=dist/%APP_NAME%.mda
-                """
-            }
-        }
 
         stage('Build & Push Docker Image') {
             steps {
