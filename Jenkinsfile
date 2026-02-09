@@ -36,15 +36,19 @@ pipeline {
             }
         }
 
-        stage('Build & Push Docker Image') {
-            steps {
-                echo "🐳 Building and pushing Docker image"
-                bat '''
-                docker build -t %ECR_REGISTRY%/%ECR_REPO%:%BUILD_NUMBER% .
-                docker push %ECR_REGISTRY%/%ECR_REPO%:%BUILD_NUMBER%
-                '''
-            }
-        }
+        stage('Build Mendix MDA') {
+    steps {
+        bat '''
+        "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
+        --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.20.101-hotspot" ^
+        --target=deploy ^
+        --loose-version-check ^
+        --output=dist ^
+        "K8 Deployment.mpr"
+        '''
+    }
+}
+
 
         stage('Deploy to Kubernetes') {
             steps {
