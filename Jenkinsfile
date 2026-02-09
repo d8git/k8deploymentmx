@@ -42,13 +42,14 @@ pipeline {
         "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
         --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.20.101-hotspot" ^
         --java-exe-path="C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.20.101-hotspot\\bin\\java.exe" ^
-        --target=deploy ^
+        --target=package ^
         --loose-version-check ^
-        --output=dist ^
+        --output=dist\\app.mda ^
         "K8 Deployment.mpr"
         '''
     }
 }
+
 
 
 
