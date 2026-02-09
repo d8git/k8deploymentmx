@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withEnv(["KUBECONFIG=C:\\jenkins\\.kube\\config"]) {
+                withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) { 
                     bat '''
                     kubectl get nodes
                     kubectl set image deployment/xv3i01a5 ^
