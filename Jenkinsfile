@@ -56,7 +56,7 @@ pipeline {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'aws-ecr-creds'
-                ]])
+                ]]) {
                 withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) {
                     bat '''
                     kubectl get nodes
@@ -68,8 +68,8 @@ pipeline {
                 }
             }
         }
-
-    } 
+      }
+    }
 
     post {
         success {
