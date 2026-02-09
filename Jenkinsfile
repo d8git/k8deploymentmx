@@ -53,13 +53,19 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-ecr-creds',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]])
                 withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) { 
                     bat '''
                     kubectl get nodes
-                    kubectl set image deployment/xv3i01a5 ^
-                    xv3i01a5=320368024572.dkr.ecr.us-east-1.amazonaws.com/aws-ecr:18 ^
-                    -n mxdev
-                    kubectl rollout status deployment/xv3i01a5 -n mxdev
+                    kubectl set image deployment/%APP_NAME% ^
+                    %APP_NAME%=%ECR_REGISTRY%/%ECR_REPO%:18 ^
+                    -n %K8S_NAMESPACE%
+                    kubectl rollout status deployment/%APP_NAME% -n %K8S_NAMESPACE%
                     '''
                 }
             }
