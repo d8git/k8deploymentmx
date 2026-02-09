@@ -40,8 +40,8 @@ pipeline {
     steps {
         bat '''
         "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
-        --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.20.101-hotspot" ^
-        --java-exe-path="C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.20.101-hotspot\\bin\\java.exe" ^
+        --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot" ^
+        --java-exe-path="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot\\bin\\java.exe" ^
         --target=package ^
         --loose-version-check ^
         --output=dist\\app.mda ^
