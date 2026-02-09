@@ -60,10 +60,10 @@ pipeline {
                 withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) {
                     bat '''
                     kubectl get nodes
-                    kubectl set image deployment/%APP_NAME% ^
-                    %APP_NAME%=%ECR_REGISTRY%/%ECR_REPO%:18 ^
+                    kubectl set image deployment/%APP_NAME%-master ^
+                    mendix=%ECR_REGISTRY%/%ECR_REPO%:%BUILD_NUMBER% ^
                     -n %K8S_NAMESPACE%
-                    kubectl rollout status deployment/%APP_NAME% -n %K8S_NAMESPACE%
+                    kubectl rollout status deployment/%APP_NAME%-master -n %K8S_NAMESPACE%
                     '''
                 }
             }
