@@ -37,35 +37,35 @@ pipeline {
         }
 
         stage('Build Mendix MDA') {
-    steps {
-        bat '''
-        "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
-        --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot" ^
-        --java-exe-path="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot\\bin\\java.exe" ^
-        --target=package ^
-        --loose-version-check ^
-        --output=dist\\app.mda ^
-        "K8 Deployment.mpr"
-        '''
-    }
+            steps {
+                echo "Creating .mda package"
+                bat '''
+                "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
+                --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot" ^
+                --java-exe-path="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot\\bin\\java.exe" ^
+                --target=package ^
+                --loose-version-check ^
+                --output=dist\\app.mda ^
+                "K8 Deployment.mpr"
+                '''
+            }
 }
-
-
-
 
         stage('Deploy to Kubernetes') {
             steps {
-                echo "🚀 Deploying to Kubernetes"
-                bat '''
-                kubectl set image deployment/%APP_NAME% ^
-                  %APP_NAME%=%ECR_REGISTRY%/%ECR_REPO%:%BUILD_NUMBER% ^
-                  -n %K8S_NAMESPACE%
-
-                kubectl rollout status deployment/%APP_NAME% -n %K8S_NAMESPACE%
-                '''
+                withEnv(["KUBECONFIG=C:\\jenkins\\.kube\\config"]) {
+                    bat '''
+                    kubectl get nodes
+                    kubectl set image deployment/xv3i01a5 ^
+                    xv3i01a5=320368024572.dkr.ecr.us-east-1.amazonaws.com/aws-ecr:18 ^
+                    -n mxdev
+                    kubectl rollout status deployment/xv3i01a5 -n mxdev
+                    '''
+                }
             }
         }
-    }
+
+    } 
 
     post {
         success {
