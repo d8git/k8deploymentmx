@@ -55,11 +55,9 @@ pipeline {
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-ecr-creds',
-                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    credentialsId: 'aws-ecr-creds'
                 ]])
-                withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) { 
+                withEnv(["KUBECONFIG=C:\\Program Files\\jenkins\\.kube\\config"]) {
                     bat '''
                     kubectl get nodes
                     kubectl set image deployment/%APP_NAME% ^
