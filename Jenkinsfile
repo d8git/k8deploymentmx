@@ -38,7 +38,7 @@ pipeline {
 
         stage('Build Mendix MDA') {
             steps {
-                echo "Creating .mda package"
+                echo "Creating .mda package mxbuild"
                 bat '''
                 "C:\\Program Files\\Mendix\\10.24.13.86719\\modeler\\mxbuild.exe" ^
                 --java-home="C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.5.11-hotspot" ^
